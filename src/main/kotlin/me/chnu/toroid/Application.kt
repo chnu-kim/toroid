@@ -1,11 +1,11 @@
-package me.chnu.chzzk
+package me.chnu.toroid
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class ChzzkApplication
+class Application
 
 fun main(args: Array<String>) {
-    runApplication<ChzzkApplication>(*args)
+    runApplication<Application>(*args)
 }

@@ -1,1 +1,1 @@
-rootProject.name = "chzzk"
+rootProject.name = "toroid"

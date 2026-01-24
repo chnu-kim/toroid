@@ -1,4 +1,4 @@
-package me.chnu.chzzkplayground.config
+package me.chnu.toroid.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry

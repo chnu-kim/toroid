@@ -1,6 +1,7 @@
-package me.chnu.chzzk.presentation
+package me.chnu.toroid.presentation
 
-import me.chnu.chzzk.domain.auth.ChzzkAuthService
+import me.chnu.toroid.application.ChzzkAuthUseCase
+import me.chnu.toroid.domain.chzzk.auth.ChzzkAuthService
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -10,13 +11,14 @@ import org.springframework.web.bind.annotation.RestController
 import java.net.URI
 
 @RestController
-class ChzzkAuthController(
-    private val chzzkAuthService: ChzzkAuthService,
+class ChzzkOAuth2Controller(
+    private val authService: ChzzkAuthService,
+    private val chzzkAuthUseCase: ChzzkAuthUseCase,
 ) {
 
     @GetMapping("/chzzk/authentication")
     fun authenticate(): ResponseEntity<Void> {
-        val uri = chzzkAuthService.generateAuthUri()
+        val uri = authService.generateAuthUri()
 
         return ResponseEntity.status(HttpStatus.FOUND)
             .header(HttpHeaders.LOCATION, uri.toString())
@@ -27,13 +29,19 @@ class ChzzkAuthController(
     fun accountInterlock(
         @RequestParam("code") code: String,
         @RequestParam("state") state: String,
-    ): ResponseEntity<Void> {
-
-        chzzkAuthService.authenticate(code, state)
-
+    ): ResponseEntity<AuthResponse> {
+        val authResponse = chzzkAuthUseCase.loadUser(code, state)
         val headers = HttpHeaders().apply {
             location = URI.create("https://chzzk.naver.com")
         }
-        return ResponseEntity(headers, HttpStatus.FOUND)
+        val response = AuthResponse(
+            authResponse.accessToken,
+            authResponse.refreshToken,
+            authResponse.accessTokenExpiresIn,
+            authResponse.refreshTokenExpiresIn,
+        )
+
+        return ResponseEntity(response, headers, HttpStatus.OK)
     }
 }
+

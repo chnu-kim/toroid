@@ -1,4 +1,4 @@
-package me.chnu.chzzk.config.chzzk
+package me.chnu.toroid.config.chzzk
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import java.net.URI
