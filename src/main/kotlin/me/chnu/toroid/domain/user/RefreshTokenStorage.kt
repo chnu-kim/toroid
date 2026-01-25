@@ -5,9 +5,9 @@ import kotlin.time.Duration
 
 
 interface RefreshTokenStorage {
-    fun save(refreshToken: RefreshToken, id: UUID)
+    fun save(refreshToken: RefreshToken, id: PublicId)
 
-    fun findByToken(refreshToken: RefreshToken): UUID?
+    fun findByToken(refreshToken: RefreshToken): PublicId?
 
     fun revoke(refreshToken: RefreshToken)
 }

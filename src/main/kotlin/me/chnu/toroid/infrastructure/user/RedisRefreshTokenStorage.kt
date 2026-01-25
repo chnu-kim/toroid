@@ -1,6 +1,7 @@
 package me.chnu.toroid.infrastructure.user
 
 import me.chnu.toroid.config.JwtProperties
+import me.chnu.toroid.domain.user.PublicId
 import me.chnu.toroid.domain.user.RefreshToken
 import me.chnu.toroid.domain.user.RefreshTokenStorage
 import org.springframework.beans.factory.annotation.Value
@@ -25,16 +26,17 @@ class RedisRefreshTokenStorage(
 
     override fun save(
         refreshToken: RefreshToken,
-        id: UUID,
+        id: PublicId,
     ) {
         val hashedToken = hash(refreshToken)
         redisTemplate.opsForValue().set(hashedToken, id.toString(), jwtProperties.refreshTokenExpiresIn.toJavaDuration())
     }
 
-    override fun findByToken(refreshToken: RefreshToken): UUID? {
+    override fun findByToken(refreshToken: RefreshToken): PublicId? {
         val hashedToken = hash(refreshToken)
         val uuid = redisTemplate.opsForValue().get(hashedToken)
-        return UUID.fromString(uuid)
+        val publicId = UUID.fromString(uuid)
+        return publicId?.let(::PublicId)
     }
 
     override fun revoke(refreshToken: RefreshToken) {

@@ -25,5 +25,5 @@ interface TokenValidator {
      * @return 토큰의 subject에 포함된 사용자 UUID
      * @throws com.auth0.jwt.exceptions.JWTVerificationException 토큰이 유효하지 않은 경우
      */
-    fun extractUserId(token: AccessToken): UUID
+    fun extractUserId(token: AccessToken): PublicId
 }

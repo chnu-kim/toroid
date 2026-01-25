@@ -15,9 +15,10 @@ class JwtTokenProvider(
     private val algorithm: Algorithm,
     private val jwtProperties: JwtProperties,
 ) : TokenGenerator, TokenValidator {
-    override fun generateAccessToken(id: UUID) = JWT.create()
+    override fun generateAccessToken(id: PublicId) = JWT.create()
         .withSubject(id.toString())
         .withExpiresAt(jwtProperties.accessTokenExpiresIn.toInstant())
+        .withIssuer(jwtProperties.issuer)
         .withIssuedAt(Instant.now(Clock.systemUTC()))
         .sign(algorithm)
         .let(::AccessToken)
@@ -46,13 +47,14 @@ class JwtTokenProvider(
         }
     }
 
-    override fun extractUserId(token: AccessToken): UUID {
+    override fun extractUserId(token: AccessToken): PublicId {
         val decodedJwt = JWT.require(algorithm)
             .withIssuer(jwtProperties.issuer)
             .build()
             .verify(token.value)
 
-        return UUID.fromString(decodedJwt.subject)
+        val publicId = UUID.fromString(decodedJwt.subject)
+        return publicId.let(::PublicId)
     }
 
     private fun Duration.toInstant(): Instant {
