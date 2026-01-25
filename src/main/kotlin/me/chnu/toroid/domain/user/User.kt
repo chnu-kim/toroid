@@ -20,9 +20,9 @@ class User(
         strategy = GenerationType.SEQUENCE,
         generator = USER_SEQ_GENERATOR,
     )
-    var name: String,
     val id: Long = 0L,
-    val publicId: UUID,
+    var name: String,
+    val publicId: PublicId,
     val createdAt: OffsetDateTime,
 ) {
 
