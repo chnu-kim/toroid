@@ -2,8 +2,9 @@ package me.chnu.toroid
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration
 
-@SpringBootApplication
+@SpringBootApplication(exclude = [UserDetailsServiceAutoConfiguration::class])
 class Application
 
 fun main(args: Array<String>) {

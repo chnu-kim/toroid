@@ -58,9 +58,4 @@ class SecurityConfig {
             registerCorsConfiguration("/**", config)
         }
     }
-
-    @Bean
-    fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager {
-        return config.authenticationManager
-    }
 }
