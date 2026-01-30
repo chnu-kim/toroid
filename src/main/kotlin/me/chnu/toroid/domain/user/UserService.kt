@@ -27,7 +27,7 @@ class UserService(
 
         val newUser = User(
             name = name,
-            publicId = UUID.randomUUID().let(::PublicId),
+            publicId = PublicId.new(),
             createdAt = OffsetDateTime.now(),
         )
         val savedUser = userRepository.save(newUser)
