@@ -2,27 +2,38 @@ package me.chnu.toroid.domain.user
 
 import jakarta.persistence.*
 import java.time.OffsetDateTime
-import java.util.*
 
-private const val USER_SEQ_GENERATOR = "USER_SEQ_GENERATOR"
+
+private const val USER_ID_SEQ_GENERATOR = "USER_ID_SEQ_GENERATOR"
 
 @SequenceGenerator(
-    name = USER_SEQ_GENERATOR,
-    sequenceName = "user_seq",
+    name = USER_ID_SEQ_GENERATOR,
+    sequenceName = "user_id_seq",
     initialValue = 1,
     allocationSize = 50,
 )
-@Table(name = "users")
+@Table(
+    name = "users",
+    uniqueConstraints = [
+        UniqueConstraint(
+            name = "users_public_id_key",
+            columnNames = ["public_id"],
+        ),
+    ]
+)
 @Entity
 class User(
     @Id
     @GeneratedValue(
         strategy = GenerationType.SEQUENCE,
-        generator = USER_SEQ_GENERATOR,
+        generator = USER_ID_SEQ_GENERATOR,
     )
     val id: Long = 0L,
+    @Column(nullable = false)
     var name: String,
+    @Column(nullable = false)
     val publicId: PublicId,
+    @Column(nullable = false)
     val createdAt: OffsetDateTime,
 ) {
 
