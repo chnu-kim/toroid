@@ -3,26 +3,45 @@ package me.chnu.toroid.domain.user
 import jakarta.persistence.*
 import java.time.OffsetDateTime
 
+private const val SOCIAL_ACCOUNT_ID_SEQ_GENERATOR = "USER_ID_SEQ_GENERATOR"
+
+@SequenceGenerator(
+    name = SOCIAL_ACCOUNT_ID_SEQ_GENERATOR,
+    sequenceName = "social_account_id_seq",
+    initialValue = 1,
+    allocationSize = 50,
+)
 @Entity
 @Table(
     name = "social_accounts",
     uniqueConstraints = [
         UniqueConstraint(
-            name = "uq_social_accounts_provider_provider_id",
+            name = "social_accounts_provider_provider_id_key",
             columnNames = ["provider", "providerId"]
         )
     ]
 )
 class SocialAccount(
     @Id
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = SOCIAL_ACCOUNT_ID_SEQ_GENERATOR,
+    )
     val id: Long = 0L,
+
     @ManyToOne
-    @MapsId
-    @JoinColumn(name = "id")
+    @JoinColumn(
+        name = "user_id",
+        foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT),
+        nullable = false,
+    )
     val user: User,
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     val provider: SocialAccountProvider,
+    @Column(nullable = false)
     val providerId: String,
+    @Column(nullable = false)
     val createdAt: OffsetDateTime,
 ) {
 
