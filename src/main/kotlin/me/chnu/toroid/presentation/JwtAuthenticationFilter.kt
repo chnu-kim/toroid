@@ -15,10 +15,13 @@ import org.springframework.web.filter.OncePerRequestFilter
 class JwtAuthenticationFilter(
     private val tokenValidator: TokenValidator
 ) : OncePerRequestFilter() {
+
+    private val logger = KotlinLogging.logger { }
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         try {
             val accessToken = request.extractAccessToken()
@@ -52,7 +55,7 @@ class JwtAuthenticationFilter(
 
         override fun getCredentials() = null
 
-        override fun getPrincipal() = userId
+        override fun getPrincipal() = UserPrincipal(userId)
 
     }
 }

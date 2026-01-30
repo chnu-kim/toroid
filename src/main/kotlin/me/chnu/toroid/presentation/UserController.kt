@@ -1,6 +1,5 @@
 package me.chnu.toroid.presentation
 
-import me.chnu.toroid.domain.user.PublicId
 import me.chnu.toroid.domain.user.User
 import me.chnu.toroid.domain.user.UserService
 import org.springframework.http.ResponseEntity
@@ -17,9 +16,9 @@ class UserController(
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/users/me")
     fun getUser(
-        @AuthenticationPrincipal publicId: PublicId,
+        @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<User> = userService
-        .findByPublicId(publicId)
+        .findByPublicId(principal.id)
         .let { ResponseEntity.ok(it) }
 
 }

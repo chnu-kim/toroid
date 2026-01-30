@@ -5,9 +5,6 @@ import java.util.*
 
 /**
  * Public identifier for a user.
- *
- * This value is used as the Spring Security authentication principal, so it can be injected via
- * `@AuthenticationPrincipal` in controller methods.
  */
 @JvmInline
 value class PublicId(@get:JsonValue val value: UUID) {
