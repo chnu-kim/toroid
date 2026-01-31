@@ -1,9 +1,16 @@
 server:
   port: 8888
 
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
 app.public-base-url: http://127.0.0.1:8888
 
 spring:
+  application:
+    name: toroid
   datasource:
     hikari:
       maximum-pool-size: 4
@@ -32,7 +39,8 @@ spring:
       ddl-auto: update
   docker:
     compose:
-      lifecycle-management: start_only
+      lifecycle-management: start-and-stop
+
 
 jwt:
   secret: "your_jwt_secret_key_here"
@@ -41,3 +49,12 @@ jwt:
   refresh-token-expires-in: P15D
   public-key: classpath:keys/public_key.pem
   private-key: classpath:keys/private_key.pem
+chzzk:
+  base-url: ${CHZZK_BASE_URL}
+  login-redirect-url-path: ${CHZZK_LOGIN_REDIRECT_URL_PATH}
+  client-id: ${CHZZK_CLIENT_ID}
+  client-secret: ${CHZZK_CLIENT_SECRET}
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
