@@ -20,7 +20,7 @@ class SocketChzzkSessionManager(
 
     override fun connect(channelId: ChannelId, sessionUrl: URI) {
         if (sessions.containsKey(channelId.value)) {
-            val socket = sessions[channelId.value]!!
+            val socket = checkNotNull(sessions[channelId.value])
             if (socket.connected()) {
                 logger.warn { "Already connected to $channelId" }
                 return
@@ -32,7 +32,7 @@ class SocketChzzkSessionManager(
 
         val options = IO.Options().apply {
             reconnection = true
-            timeout = 3000
+            timeout = SOCKET_TIMEOUT_MS
             forceNew = true
             transports = arrayOf("websocket")
         }
@@ -74,6 +74,10 @@ class SocketChzzkSessionManager(
             session.value.off()
         }
         sessions.clear()
+    }
+
+    companion object {
+        private const val SOCKET_TIMEOUT_MS = 3000L
     }
 
     private object Chzzk {
