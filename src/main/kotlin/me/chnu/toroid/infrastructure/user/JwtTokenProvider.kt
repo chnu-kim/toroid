@@ -4,7 +4,13 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import me.chnu.toroid.config.JwtProperties
-import me.chnu.toroid.domain.user.*
+import me.chnu.toroid.domain.user.AccessToken
+import me.chnu.toroid.domain.user.AccessTokenResponse
+import me.chnu.toroid.domain.user.PublicId
+import me.chnu.toroid.domain.user.RefreshToken
+import me.chnu.toroid.domain.user.RefreshTokenResponse
+import me.chnu.toroid.domain.user.TokenGenerator
+import me.chnu.toroid.domain.user.TokenValidator
 import java.time.Clock
 import java.time.Instant
 import java.util.*
@@ -42,7 +48,7 @@ class JwtTokenProvider(
                 .build()
                 .verify(token.value)
             return true
-        } catch (e: JWTVerificationException) {
+        } catch (_: JWTVerificationException) {
             return false
         }
     }
