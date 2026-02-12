@@ -1,6 +1,19 @@
 package me.chnu.toroid.domain.user
 
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.ConstraintMode
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.ForeignKey
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.SequenceGenerator
+import jakarta.persistence.Table
+import jakarta.persistence.UniqueConstraint
 import java.time.OffsetDateTime
 
 private const val SOCIAL_ACCOUNT_ID_SEQ_GENERATOR = "USER_ID_SEQ_GENERATOR"

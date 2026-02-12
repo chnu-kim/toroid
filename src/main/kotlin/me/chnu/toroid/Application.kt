@@ -7,6 +7,7 @@ import org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoCon
 @SpringBootApplication(exclude = [UserDetailsServiceAutoConfiguration::class])
 class Application
 
+@Suppress("SpreadOperator")
 fun main(args: Array<String>) {
     runApplication<Application>(*args)
 }

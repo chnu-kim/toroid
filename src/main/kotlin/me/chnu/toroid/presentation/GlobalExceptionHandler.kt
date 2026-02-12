@@ -3,7 +3,12 @@ package me.chnu.toroid.presentation
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
 import me.chnu.toroid.ServerException
-import org.springframework.http.*
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
+import org.springframework.http.MediaType
+import org.springframework.http.ProblemDetail
+import org.springframework.http.ResponseEntity
 import org.springframework.web.ErrorResponse
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -37,7 +42,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(AccessDeniedException::class)
     fun handleAccessDeniedException(
-        ex: AccessDeniedException,
+        @Suppress("UnusedParameter") ex: AccessDeniedException,
         request: HttpServletRequest,
     ): ResponseEntity<ProblemDetail> {
         val problemDetail = ProblemDetail.forStatus(HttpStatus.FORBIDDEN).apply {

@@ -103,12 +103,5 @@ class ChzzkClientImpl(
         return HttpComponentsClientHttpRequestFactory(httpClient)
     }
 
-    private fun <T, U> ChzzkResponse<T>.map(transform: (T?) -> U?): ChzzkResponse<U> {
-        return ChzzkResponse(
-            this.code,
-            this.message,
-            transform(this.content),
-        )
-    }
 }
 
