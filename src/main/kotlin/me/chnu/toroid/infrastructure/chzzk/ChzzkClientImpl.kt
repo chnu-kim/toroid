@@ -1,7 +1,12 @@
 package me.chnu.toroid.infrastructure.chzzk
 
 import me.chnu.toroid.config.chzzk.ChzzkProperties
-import me.chnu.toroid.domain.chzzk.*
+import me.chnu.toroid.domain.chzzk.ChzzkApiException
+import me.chnu.toroid.domain.chzzk.ChzzkClient
+import me.chnu.toroid.domain.chzzk.ChzzkResponse
+import me.chnu.toroid.domain.chzzk.TokenRequest
+import me.chnu.toroid.domain.chzzk.TokenResponse
+import me.chnu.toroid.domain.chzzk.UserResponse
 import org.apache.hc.client5.http.config.ConnectionConfig
 import org.apache.hc.client5.http.config.RequestConfig
 import org.apache.hc.client5.http.impl.classic.HttpClients
@@ -58,7 +63,10 @@ class ChzzkClientImpl(
             .retrieve()
             .body<ChzzkResponse<Map<String, String>>>()
             .validateChzzkResponse()
-            .let { URI.create(it["url"]!!) }
+            .let { response ->
+                val url = checkNotNull(response["url"]) { "Session URL is missing from response" }
+                URI.create(url)
+            }
     }
 
     private fun <T> ChzzkResponse<T>?.validateChzzkResponse(): T {
