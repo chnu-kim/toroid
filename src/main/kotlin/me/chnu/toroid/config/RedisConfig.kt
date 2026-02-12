@@ -33,7 +33,6 @@ class RedisConfig {
             sentinelUsername = sentinel.username
             setSentinelPassword(sentinel.password)
             sentinel.nodes
-                .stream()
                 .map({ node -> RedisNode(node.host(), node.port()) })
                 .forEach({ node -> this.addSentinel(node) })
         }
