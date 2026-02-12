@@ -17,7 +17,7 @@ class JwtAuthenticationFilter(
     private val tokenValidator: TokenValidator
 ) : OncePerRequestFilter() {
 
-    private val logger = KotlinLogging.logger { }
+    private val klogger = KotlinLogging.logger { }
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -29,8 +29,8 @@ class JwtAuthenticationFilter(
             val userId = tokenValidator.extractUserId(accessToken)
             val token = AuthenticatedUserToken(userId)
             SecurityContextHolder.getContext().authentication = token
-        } catch (e: Exception) {
-            logger.trace(e) { e.message }
+        } catch (expected: Exception) {
+            klogger.trace(expected) { expected.message }
             SecurityContextHolder.clearContext()
         } finally {
             filterChain.doFilter(request, response)
@@ -38,14 +38,10 @@ class JwtAuthenticationFilter(
     }
 
     private fun HttpServletRequest.extractAccessToken(): AccessToken {
-        val authorizationHeader = getHeader("Authorization")
-            ?: throw IllegalArgumentException("Authorization header is missing")
+        val authorizationHeader = requireNotNull(getHeader("Authorization")) { "Authorization header is missing" }
+        require(authorizationHeader.startsWith("Bearer ")) { "Invalid Authorization header format" }
 
-        if (!authorizationHeader.startsWith("Bearer ")) {
-            throw IllegalArgumentException("Invalid Authorization header format")
-        }
-
-        val token = authorizationHeader.substring(7)
+        val token = authorizationHeader.substring("Bearer ".length)
         return AccessToken(token)
     }
 
