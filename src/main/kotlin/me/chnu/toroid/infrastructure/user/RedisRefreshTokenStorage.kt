@@ -13,7 +13,6 @@ import java.security.NoSuchAlgorithmException
 import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
-import kotlin.time.Duration
 import kotlin.time.toJavaDuration
 
 @Component
@@ -29,7 +28,8 @@ class RedisRefreshTokenStorage(
         id: PublicId,
     ) {
         val hashedToken = hash(refreshToken)
-        redisTemplate.opsForValue().set(hashedToken, id.toString(), jwtProperties.refreshTokenExpiresIn.toJavaDuration())
+        val expiration = jwtProperties.refreshTokenExpiresIn.toJavaDuration()
+        redisTemplate.opsForValue().set(hashedToken, id.toString(), expiration)
     }
 
     override fun findByToken(refreshToken: RefreshToken): PublicId? {
@@ -54,16 +54,16 @@ class RedisRefreshTokenStorage(
             val bytes = mac.doFinal(refreshToken.value.toByteArray(StandardCharsets.UTF_8))
             return bytesToHex(bytes)
         } catch (e: NoSuchAlgorithmException) {
-            throw RuntimeException("Token hashing failed", e)
+            throw IllegalStateException("Token hashing failed", e)
         } catch (e: InvalidKeyException) {
-            throw RuntimeException("Token hashing failed", e)
+            throw IllegalStateException("Token hashing failed", e)
         }
     }
 
     private fun bytesToHex(bytes: ByteArray): String {
         val sb = StringBuilder()
         for (b in bytes) {
-            sb.append(String.format("%02x", b))
+            sb.append(String.format(Locale.ROOT, "%02x", b))
         }
         return sb.toString()
     }
