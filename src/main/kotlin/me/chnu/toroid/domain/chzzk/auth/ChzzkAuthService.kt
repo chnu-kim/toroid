@@ -3,7 +3,6 @@ package me.chnu.toroid.domain.chzzk.auth
 import me.chnu.toroid.config.chzzk.ChzzkProperties
 import me.chnu.toroid.domain.chzzk.ChzzkClient
 import me.chnu.toroid.domain.chzzk.UserResponse
-import me.chnu.toroid.domain.chzzk.realtime.ChzzkSessionManager
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.util.UriComponentsBuilder
@@ -21,7 +20,6 @@ class ChzzkAuthService(
     private val chzzkClient: ChzzkClient,
     private val stateStorage: StateStorage,
     private val chzzkTokenStorage: ChzzkTokenStorage,
-    private val chzzkSessionManager: ChzzkSessionManager
 ) {
 
     companion object {
@@ -30,7 +28,7 @@ class ChzzkAuthService(
 
     fun authenticate(code: String, state: String): UserResponse {
         if (!stateStorage.isStateValid(state)) {
-            throw RuntimeException("Invalid state")
+            error("Invalid state")
         }
 
         val tokenResponse = chzzkClient.requestAccessToken(code, state)
