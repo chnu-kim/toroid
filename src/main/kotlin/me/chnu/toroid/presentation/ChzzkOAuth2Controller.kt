@@ -17,7 +17,7 @@ class ChzzkOAuth2Controller(
 ) {
 
     @GetMapping("/chzzk/authentication")
-    fun authenticate(): ResponseEntity<Void> {
+    fun authenticate(): ResponseEntity<Unit> {
         val uri = authService.generateAuthUri()
 
         return ResponseEntity.status(HttpStatus.FOUND)
