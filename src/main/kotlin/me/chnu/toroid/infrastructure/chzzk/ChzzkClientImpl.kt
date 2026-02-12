@@ -13,6 +13,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
+import java.net.URI
 
 
 @Component
@@ -50,6 +51,16 @@ class ChzzkClientImpl(
         .body<ChzzkResponse<UserResponse>>()
         .validateChzzkResponse()
 
+    override fun getSessionUrl(accessToken: String): URI {
+        return client.get()
+            .uri("/open/v1/sessions/auth")
+            .headers { headers -> headers.setBearerAuth(accessToken) }
+            .retrieve()
+            .body<ChzzkResponse<Map<String, String>>>()
+            .validateChzzkResponse()
+            .let { URI.create(it["url"]!!) }
+    }
+
     private fun <T> ChzzkResponse<T>?.validateChzzkResponse(): T {
         val response = this
             ?: throw ChzzkApiException("Chzzk API response content is null", 500)
@@ -86,9 +97,18 @@ class ChzzkClientImpl(
             .setDefaultRequestConfig(requestConfig)
             .evictIdleConnections(TimeValue.ofSeconds(30))
             .disableAutomaticRetries()
+            .disableCookieManagement()
             .build()
 
         return HttpComponentsClientHttpRequestFactory(httpClient)
+    }
+
+    private fun <T, U> ChzzkResponse<T>.map(transform: (T?) -> U?): ChzzkResponse<U> {
+        return ChzzkResponse(
+            this.code,
+            this.message,
+            transform(this.content),
+        )
     }
 }
 
