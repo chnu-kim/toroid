@@ -1,7 +1,10 @@
 package me.chnu.toroid.application
 
 import me.chnu.toroid.domain.chzzk.auth.ChzzkAuthService
-import me.chnu.toroid.domain.user.*
+import me.chnu.toroid.domain.user.RefreshTokenStorage
+import me.chnu.toroid.domain.user.SocialAccountProvider
+import me.chnu.toroid.domain.user.TokenGenerator
+import me.chnu.toroid.domain.user.UserService
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,7 +19,7 @@ class ChzzkAuthUseCase(
         val chzzkUser = chzzkAuthService.authenticate(code, state)
         val user = userService.saveOrUpdate(
             SocialAccountProvider.CHZZK,
-            chzzkUser.channelId,
+            chzzkUser.channelId.value,
             chzzkUser.channelName
         )
 

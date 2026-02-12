@@ -3,6 +3,7 @@ package me.chnu.toroid.domain.chzzk.auth
 import me.chnu.toroid.config.chzzk.ChzzkProperties
 import me.chnu.toroid.domain.chzzk.ChzzkClient
 import me.chnu.toroid.domain.chzzk.UserResponse
+import me.chnu.toroid.domain.chzzk.realtime.ChzzkSessionManager
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.util.UriComponentsBuilder
@@ -20,6 +21,7 @@ class ChzzkAuthService(
     private val chzzkClient: ChzzkClient,
     private val stateStorage: StateStorage,
     private val chzzkTokenStorage: ChzzkTokenStorage,
+    private val chzzkSessionManager: ChzzkSessionManager
 ) {
 
     companion object {
@@ -34,14 +36,14 @@ class ChzzkAuthService(
         val tokenResponse = chzzkClient.requestAccessToken(code, state)
         val userResponse = chzzkClient.getUserInfo(tokenResponse.accessToken)
 
-        chzzkTokenStorage.storeToken(
-            "access_" + userResponse.channelId,
+        chzzkTokenStorage.storeAccessToken(
+            userResponse.channelId,
             tokenResponse.accessToken,
             tokenResponse.expiresIn.toDuration(DurationUnit.SECONDS)
         )
 
-        chzzkTokenStorage.storeToken(
-            "refresh_" + userResponse.channelId,
+        chzzkTokenStorage.storeRefreshToken(
+            userResponse.channelId,
             tokenResponse.refreshToken,
             30.days
         )

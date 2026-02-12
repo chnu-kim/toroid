@@ -3,6 +3,9 @@ package me.chnu.toroid.domain.chzzk
 import me.chnu.toroid.config.chzzk.ChzzkClientId
 import me.chnu.toroid.config.chzzk.ChzzkClientSecret
 
+@JvmInline
+value class ChannelId(val value: String)
+
 data class ChzzkResponse<T>(
     val code: Int,
     val message: String?,
@@ -26,6 +29,6 @@ data class TokenResponse(
 )
 
 data class UserResponse(
-    val channelId: String,
+    val channelId: ChannelId,
     val channelName: String,
 )
