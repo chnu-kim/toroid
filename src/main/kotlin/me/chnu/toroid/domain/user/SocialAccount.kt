@@ -65,7 +65,7 @@ class SocialAccount(
         if (javaClass != other?.javaClass) {
             return false
         }
-        other as User
+        other as SocialAccount
         return id == other.id
     }
 
