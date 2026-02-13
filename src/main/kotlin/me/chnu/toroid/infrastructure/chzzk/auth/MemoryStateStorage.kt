@@ -13,7 +13,7 @@ class MemoryStateStorage : StateStorage {
         stateRepository[state] = Instant.now()
     }
 
-    override fun isStateValid(state: String): Boolean {
+    override fun consumeState(state: String): Boolean {
         if (stateRepository.containsKey(state)) {
             stateRepository.remove(state)
             return true
