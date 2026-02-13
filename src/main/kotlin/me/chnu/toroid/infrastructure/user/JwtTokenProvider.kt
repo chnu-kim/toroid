@@ -11,12 +11,14 @@ import me.chnu.toroid.domain.user.RefreshToken
 import me.chnu.toroid.domain.user.RefreshTokenResponse
 import me.chnu.toroid.domain.user.TokenGenerator
 import me.chnu.toroid.domain.user.TokenValidator
+import org.springframework.stereotype.Component
 import java.time.Clock
 import java.time.Instant
 import java.util.*
 import kotlin.time.Duration
 import kotlin.time.toJavaDuration
 
+@Component
 class JwtTokenProvider(
     private val algorithm: Algorithm,
     private val jwtProperties: JwtProperties,
