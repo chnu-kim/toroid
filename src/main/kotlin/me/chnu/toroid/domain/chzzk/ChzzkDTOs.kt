@@ -1,8 +1,5 @@
 package me.chnu.toroid.domain.chzzk
 
-import me.chnu.toroid.config.chzzk.ChzzkClientId
-import me.chnu.toroid.config.chzzk.ChzzkClientSecret
-
 @JvmInline
 value class ChannelId(val value: String)
 
@@ -14,8 +11,8 @@ data class ChzzkResponse<T>(
 
 data class TokenRequest(
     val grantType: String = "authorization_code",
-    val clientId: ChzzkClientId,
-    val clientSecret: ChzzkClientSecret,
+    val clientId: String,
+    val clientSecret: String,
     val code: String,
     val state: String,
 )
