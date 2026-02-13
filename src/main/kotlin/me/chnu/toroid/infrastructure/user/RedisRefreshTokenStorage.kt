@@ -34,9 +34,9 @@ class RedisRefreshTokenStorage(
 
     override fun findByToken(refreshToken: RefreshToken): PublicId? {
         val hashedToken = hash(refreshToken)
-        val uuid = redisTemplate.opsForValue().get(hashedToken)
-        val publicId = UUID.fromString(uuid)
-        return publicId?.let(::PublicId)
+        return redisTemplate.opsForValue().get(hashedToken)
+            ?.let(UUID::fromString)
+            ?.let(::PublicId)
     }
 
     override fun revoke(refreshToken: RefreshToken) {
