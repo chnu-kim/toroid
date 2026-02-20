@@ -26,4 +26,18 @@ class ArchitectureTest : StringSpec({
             }
         }
     }
+
+    val domainUser = Layer("DomainUser", "me.chnu.toroid.domain.user..")
+    val domainChzzk = Layer("DomainChzzk", "me.chnu.toroid.domain.chzzk..")
+    val domainTrpg = Layer("DomainTrpg", "me.chnu.toroid.domain.trpg..")
+
+    "도메인 간 의존성은 없어야 한다" {
+        with(KoArchitectureCreator) {
+            scope.assertArchitecture {
+                domainUser.dependsOnNothing()
+                domainChzzk.dependsOnNothing()
+                domainTrpg.dependsOnNothing()
+            }
+        }
+    }
 })
