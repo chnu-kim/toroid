@@ -19,15 +19,9 @@ class SocketChzzkSessionManager(
     private val sessions = ConcurrentHashMap<String, Socket>()
 
     override fun connect(channelId: ChannelId, sessionUrl: URI) {
-        if (sessions.containsKey(channelId.value)) {
-            val socket = checkNotNull(sessions[channelId.value])
-            if (socket.connected()) {
-                logger.warn { "Already connected to $channelId" }
-                return
-            }
-            socket.off()
-            socket.disconnect()
-            sessions.remove(channelId.value)
+        sessions.remove(channelId.value)?.let { old ->
+            old.off()
+            old.disconnect()
         }
 
         val options = IO.Options().apply {
@@ -62,16 +56,17 @@ class SocketChzzkSessionManager(
     }
 
     override fun disconnect(channelId: ChannelId) {
-        sessions[channelId.value]?.disconnect()
-        sessions[channelId.value]?.off()
-        sessions.remove(channelId.value)
+        sessions.remove(channelId.value)?.let { socket ->
+            socket.off()
+            socket.disconnect()
+        }
     }
 
     @PreDestroy
     fun cleanup() {
-        sessions.forEach { session ->
-            session.value.disconnect()
-            session.value.off()
+        sessions.values.forEach { socket ->
+            socket.off()
+            socket.disconnect()
         }
         sessions.clear()
     }
