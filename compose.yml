@@ -17,10 +17,13 @@ services:
       - "6379"
     volumes:
       - redis-data:/data
+
   open-telemetry:
-    image: grafana/otel-lgtm
+    image: otel/opentelemetry-collector-contrib
+#    command: [ "--config=/etc/otel-collector-config.yaml" ]
+#    volumes:
+#      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
     ports:
-      - "3000:3000"
       - "4317"
       - "4318"
 volumes:
