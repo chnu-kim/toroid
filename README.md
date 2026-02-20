@@ -3,17 +3,20 @@
 Spring Boot (Kotlin) API that integrates Chzzk OAuth, issues JWTs, and stores user/session data with PostgreSQL + Redis.
 
 ## Features
+
 - Chzzk OAuth login flow and user profile fetch
 - JWT access/refresh token issuance (RSA)
 - Refresh token storage in Redis
 - User profile endpoint secured by JWT
 
 ## Requirements
+
 - JDK 21
 - Docker (for PostgreSQL/Redis via Compose)
 - Chzzk API credentials
 
 ## Configuration
+
 Set these values in `src/main/resources/application.yml` or environment variables:
 
 - `app.public-base-url` (e.g., `http://127.0.0.1:8888`)
@@ -29,11 +32,13 @@ Set these values in `src/main/resources/application.yml` or environment variable
 `compose.yml` provides PostgreSQL and Redis for local development.
 
 ## Run
+
 ```bash
 ./gradlew bootRun
 ```
 
 ## API
+
 - `GET /chzzk/authentication` -> redirects to Chzzk authorization page
 - `GET {chzzk.login-redirect-url-path}` -> handles OAuth callback and returns tokens
 - `GET /users/me` -> returns current user (requires `Authorization: Bearer <accessToken>`)
@@ -41,6 +46,7 @@ Set these values in `src/main/resources/application.yml` or environment variable
 A sample request is in `http/auth.http`.
 
 ## Tests
+
 ```bash
 ./gradlew test
 ```
