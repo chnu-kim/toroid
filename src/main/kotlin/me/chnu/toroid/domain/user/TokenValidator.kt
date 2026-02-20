@@ -1,7 +1,5 @@
 package me.chnu.toroid.domain.user
 
-import java.util.UUID
-
 interface TokenValidator {
     /**
      * 토큰의 유효성을 검증합니다.
@@ -25,5 +23,5 @@ interface TokenValidator {
      * @return 토큰의 subject에 포함된 사용자 UUID
      * @throws com.auth0.jwt.exceptions.JWTVerificationException 토큰이 유효하지 않은 경우
      */
-    fun extractUserId(token: AccessToken): PublicId
+    fun extractUserId(token: AccessToken): UserPublicId
 }

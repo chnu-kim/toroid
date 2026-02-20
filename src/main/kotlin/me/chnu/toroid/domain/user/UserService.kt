@@ -22,8 +22,7 @@ class UserService(
         val newUser = userRepository.save(
             User(
                 name = name,
-                publicId = PublicId.new(),
-                createdAt = OffsetDateTime.now(),
+                publicId = UserPublicId.new(),
             )
         )
         socialAccountRepository.save(
@@ -31,14 +30,13 @@ class UserService(
                 provider = provider,
                 providerId = providerId,
                 user = newUser,
-                createdAt = OffsetDateTime.now(),
             )
         )
 
         return newUser
     }
 
-    fun findByPublicId(publicId: PublicId): User {
+    fun findByPublicId(publicId: UserPublicId): User {
         return userRepository.findByPublicId(publicId)
             ?: throw UserNotFoundException("User not found")
     }

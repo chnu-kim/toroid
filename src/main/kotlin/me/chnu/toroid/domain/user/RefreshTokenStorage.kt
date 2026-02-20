@@ -1,13 +1,10 @@
 package me.chnu.toroid.domain.user
 
-import java.util.*
-import kotlin.time.Duration
-
 
 interface RefreshTokenStorage {
-    fun save(refreshToken: RefreshToken, id: PublicId)
+    fun save(refreshToken: RefreshToken, id: UserPublicId)
 
-    fun findByToken(refreshToken: RefreshToken): PublicId?
+    fun findByToken(refreshToken: RefreshToken): UserPublicId?
 
     fun revoke(refreshToken: RefreshToken)
 }

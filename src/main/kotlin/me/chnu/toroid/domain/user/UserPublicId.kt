@@ -7,10 +7,10 @@ import java.util.*
  * Public identifier for a user.
  */
 @JvmInline
-value class PublicId(@get:JsonValue val value: UUID) {
+value class UserPublicId(@get:JsonValue val value: UUID) {
 
     companion object {
-        fun new(): PublicId = PublicId(UUID.randomUUID())
+        fun new(): UserPublicId = UserPublicId(UUID.randomUUID())
     }
 
     override fun toString(): String = value.toString()

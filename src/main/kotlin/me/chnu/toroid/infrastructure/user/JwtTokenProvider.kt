@@ -6,7 +6,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException
 import me.chnu.toroid.config.JwtProperties
 import me.chnu.toroid.domain.user.AccessToken
 import me.chnu.toroid.domain.user.AccessTokenResponse
-import me.chnu.toroid.domain.user.PublicId
+import me.chnu.toroid.domain.user.UserPublicId
 import me.chnu.toroid.domain.user.RefreshToken
 import me.chnu.toroid.domain.user.RefreshTokenResponse
 import me.chnu.toroid.domain.user.TokenGenerator
@@ -23,7 +23,7 @@ class JwtTokenProvider(
     private val algorithm: Algorithm,
     private val jwtProperties: JwtProperties,
 ) : TokenGenerator, TokenValidator {
-    override fun generateAccessToken(id: PublicId) = JWT.create()
+    override fun generateAccessToken(id: UserPublicId) = JWT.create()
         .withSubject(id.toString())
         .withExpiresAt(jwtProperties.accessTokenExpiresIn.toInstant())
         .withIssuer(jwtProperties.issuer)
@@ -55,14 +55,14 @@ class JwtTokenProvider(
         }
     }
 
-    override fun extractUserId(token: AccessToken): PublicId {
+    override fun extractUserId(token: AccessToken): UserPublicId {
         val decodedJwt = JWT.require(algorithm)
             .withIssuer(jwtProperties.issuer)
             .build()
             .verify(token.value)
 
         val publicId = UUID.fromString(decodedJwt.subject)
-        return publicId.let(::PublicId)
+        return publicId.let(::UserPublicId)
     }
 
     private fun Duration.toInstant(): Instant {

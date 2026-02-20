@@ -5,7 +5,7 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import me.chnu.toroid.domain.user.AccessToken
-import me.chnu.toroid.domain.user.PublicId
+import me.chnu.toroid.domain.user.UserPublicId
 import me.chnu.toroid.domain.user.TokenValidator
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -46,7 +46,7 @@ class JwtAuthenticationFilter(
     }
 
 
-    class AuthenticatedUserToken(private val userId: PublicId) : AbstractAuthenticationToken(listOf()) {
+    class AuthenticatedUserToken(private val userId: UserPublicId) : AbstractAuthenticationToken(listOf()) {
         init {
             super.isAuthenticated = true
         }

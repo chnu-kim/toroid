@@ -20,6 +20,7 @@ private const val USER_ID_SEQ_GENERATOR = "USER_ID_SEQ_GENERATOR"
     allocationSize = 50,
 )
 @Table(
+    schema = "auth",
     name = "users",
     uniqueConstraints = [
         UniqueConstraint(
@@ -39,9 +40,9 @@ class User(
     @Column(nullable = false)
     var name: String,
     @Column(nullable = false)
-    val publicId: PublicId,
+    val publicId: UserPublicId,
     @Column(nullable = false)
-    val createdAt: OffsetDateTime,
+    val createdAt: OffsetDateTime = OffsetDateTime.now(),
 ) {
 
     init {
