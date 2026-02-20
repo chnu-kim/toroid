@@ -56,6 +56,7 @@ kotlin {
 }
 
 tasks.withType<Detekt>().configureEach {
+    autoCorrect = true
     reports {
         checkstyle.required.set(true)
         html.required.set(true)

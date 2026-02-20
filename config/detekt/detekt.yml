@@ -704,13 +704,6 @@ style:
   MaxChainedCallsOnSameLine:
     active: false
     maxChainedCalls: 5
-  MaxLineLength:
-    active: true
-    maxLineLength: 120
-    excludePackageStatements: true
-    excludeImportStatements: true
-    excludeCommentStatements: true
-    excludeRawStrings: true
   MayBeConstant:
     active: true
   ModifierOrder:
@@ -725,10 +718,6 @@ style:
       - 'trimMargin'
   NestedClassesVisibility:
     active: true
-  NewLineAtEndOfFile:
-    active: true
-  NoTabs:
-    active: false
   NullableBooleanCheck:
     active: false
   ObjectLiteralToLambda:
@@ -768,8 +757,6 @@ style:
     maxEscapedCharacterCount: 2
     ignoredCharacters: [ ]
   ThrowsCount:
-    active: false
-  TrailingWhitespace:
     active: false
   TrimMultilineRawString:
     active: false
@@ -863,7 +850,3 @@ style:
     active: true
     aliases: [ 'CanBeVal' ]
     ignoreLateinitVar: false
-  WildcardImport:
-    active: true
-    excludeImports:
-      - 'java.util.*'
