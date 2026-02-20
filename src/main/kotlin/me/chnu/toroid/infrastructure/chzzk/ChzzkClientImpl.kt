@@ -1,12 +1,7 @@
 package me.chnu.toroid.infrastructure.chzzk
 
 import me.chnu.toroid.config.chzzk.ChzzkProperties
-import me.chnu.toroid.domain.chzzk.ChzzkApiException
-import me.chnu.toroid.domain.chzzk.ChzzkClient
-import me.chnu.toroid.domain.chzzk.ChzzkResponse
-import me.chnu.toroid.domain.chzzk.TokenRequest
-import me.chnu.toroid.domain.chzzk.TokenResponse
-import me.chnu.toroid.domain.chzzk.UserResponse
+import me.chnu.toroid.domain.chzzk.*
 import org.apache.hc.client5.http.config.ConnectionConfig
 import org.apache.hc.client5.http.config.RequestConfig
 import org.apache.hc.client5.http.impl.classic.HttpClients
@@ -14,6 +9,7 @@ import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager
 import org.apache.hc.core5.util.TimeValue
 import org.apache.hc.core5.util.Timeout
 import org.springframework.http.MediaType
+import org.springframework.http.client.ClientHttpRequestFactory
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
@@ -81,7 +77,7 @@ class ChzzkClientImpl(
             ?: throw ChzzkApiException("Chzzk API response content is null with status ${response.code}", 500)
     }
 
-    private fun getClientHttpRequestFactory(): HttpComponentsClientHttpRequestFactory {
+    private fun getClientHttpRequestFactory(): ClientHttpRequestFactory {
         val connectionManager = PoolingHttpClientConnectionManager().apply {
             maxTotal = 100
             defaultMaxPerRoute = 20
