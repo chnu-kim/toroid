@@ -71,8 +71,3 @@ class TrpgSession(
     }
 }
 
-enum class SessionStatus {
-    CREATED,
-    RUNNING,
-    ENDED,
-}
