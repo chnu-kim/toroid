@@ -14,6 +14,7 @@ import java.time.OffsetDateTime
 private const val USER_ID_SEQ_GENERATOR = "USER_ID_SEQ_GENERATOR"
 
 @SequenceGenerator(
+    schema = "auth",
     name = USER_ID_SEQ_GENERATOR,
     sequenceName = "user_id_seq",
     initialValue = 1,
