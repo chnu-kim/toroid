@@ -55,8 +55,15 @@ kotlin {
     }
 }
 
+detekt {
+    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+    parallel = true
+}
+
 tasks.withType<Detekt>().configureEach {
-    autoCorrect = true
+    autoCorrect = false
+    setSource(files("src/main/kotlin", "src/test/kotlin"))
+    exclude("**/build/**", "**/generated/**")
     reports {
         checkstyle.required.set(true)
         html.required.set(true)
