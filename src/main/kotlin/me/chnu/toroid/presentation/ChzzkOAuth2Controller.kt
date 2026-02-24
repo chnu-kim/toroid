@@ -1,9 +1,9 @@
 package me.chnu.toroid.presentation
 
 import me.chnu.toroid.application.ChzzkAuthUseCase
+import me.chnu.toroid.contract.http.ChzzkRoutes
 import me.chnu.toroid.domain.chzzk.auth.ChzzkAuthService
 import me.chnu.toroid.domain.user.RefreshToken
-import me.chnu.toroid.shared.ChzzkRoutes
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -58,7 +58,12 @@ class ChzzkOAuth2Controller(
     }
 
     @PostMapping("/refresh")
-    fun refreshToken(@CookieValue(name = "refresh_token", required = true) refreshToken: RefreshToken): ResponseEntity<Unit> {
+    fun refreshToken(
+        @CookieValue(
+            name = "refresh_token",
+            required = true
+        ) refreshToken: RefreshToken
+    ): ResponseEntity<Unit> {
         return ResponseEntity.ok().build()
     }
 }

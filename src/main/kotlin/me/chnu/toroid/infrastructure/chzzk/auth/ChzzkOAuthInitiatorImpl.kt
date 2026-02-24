@@ -1,10 +1,10 @@
 package me.chnu.toroid.infrastructure.chzzk.auth
 
 import me.chnu.toroid.config.chzzk.ChzzkProperties
+import me.chnu.toroid.contract.http.ChzzkRoutes
 import me.chnu.toroid.domain.chzzk.auth.AuthRequest
 import me.chnu.toroid.domain.chzzk.auth.ChzzkOAuthInitiator
 import me.chnu.toroid.domain.chzzk.auth.StateStorage
-import me.chnu.toroid.shared.ChzzkRoutes
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
