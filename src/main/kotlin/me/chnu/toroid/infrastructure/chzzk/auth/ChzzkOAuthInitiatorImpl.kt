@@ -4,6 +4,7 @@ import me.chnu.toroid.config.chzzk.ChzzkProperties
 import me.chnu.toroid.domain.chzzk.auth.AuthRequest
 import me.chnu.toroid.domain.chzzk.auth.ChzzkOAuthInitiator
 import me.chnu.toroid.domain.chzzk.auth.StateStorage
+import me.chnu.toroid.shared.ChzzkRoutes
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
@@ -26,7 +27,7 @@ class ChzzkOAuthInitiatorImpl(
 
         val uri = UriComponentsBuilder.fromUriString(CHZZK_AUTH_BASE_URL)
             .queryParam("clientId", chzzkProperties.clientId)
-            .queryParam("redirectUri", baseUrl + chzzkProperties.loginRedirectUrlPath)
+            .queryParam("redirectUri", baseUrl + ChzzkRoutes.LOGIN_REDIRECT_PATH)
             .queryParam("state", state)
             .build()
             .toUri()

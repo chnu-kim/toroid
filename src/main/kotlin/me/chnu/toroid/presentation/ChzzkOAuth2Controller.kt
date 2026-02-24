@@ -2,18 +2,27 @@ package me.chnu.toroid.presentation
 
 import me.chnu.toroid.application.ChzzkAuthUseCase
 import me.chnu.toroid.domain.chzzk.auth.ChzzkAuthService
+import me.chnu.toroid.domain.user.RefreshToken
+import me.chnu.toroid.shared.ChzzkRoutes
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.CookieValue
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.net.URI
+import kotlin.time.toJavaDuration
 
 @RestController
 class ChzzkOAuth2Controller(
     private val authService: ChzzkAuthService,
     private val chzzkAuthUseCase: ChzzkAuthUseCase,
+    @Value($$"${chzzk.redirect-url}")
+    private val redirectUrl: URI,
 ) {
 
     @GetMapping("/chzzk/authentication")
@@ -25,23 +34,31 @@ class ChzzkOAuth2Controller(
             .build()
     }
 
-    @GetMapping($$"${chzzk.login-redirect-url-path}")
+    @GetMapping(ChzzkRoutes.LOGIN_REDIRECT_PATH)
     fun accountInterlock(
         @RequestParam("code") code: String,
         @RequestParam("state") state: String,
-    ): ResponseEntity<AuthResponse> {
+    ): ResponseEntity<Unit> {
         val authResponse = chzzkAuthUseCase.loadUser(code, state)
-        val headers = HttpHeaders().apply {
-            location = URI.create("https://chzzk.naver.com")
-        }
-        val response = AuthResponse(
-            authResponse.accessToken,
-            authResponse.refreshToken,
-            authResponse.accessTokenExpiresIn,
-            authResponse.refreshTokenExpiresIn,
-        )
+        val isSecure = redirectUrl.scheme.equals("https", ignoreCase = true)
+        val refreshTokenCookie = ResponseCookie.from("refresh_token", authResponse.refreshToken.value)
+            .httpOnly(true)
+            .secure(isSecure)
+            .path("/")
+            .maxAge(authResponse.refreshTokenExpiresIn.toJavaDuration())
+            .sameSite("Lax")
+            .build()
 
-        return ResponseEntity(response, headers, HttpStatus.OK)
+        val headers = HttpHeaders().apply {
+            location = redirectUrl
+            add(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+        }
+
+        return ResponseEntity(headers, HttpStatus.FOUND)
+    }
+
+    @PostMapping("/refresh")
+    fun refreshToken(@CookieValue(name = "refresh_token", required = true) refreshToken: RefreshToken): ResponseEntity<Unit> {
+        return ResponseEntity.ok().build()
     }
 }
-

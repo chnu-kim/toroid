@@ -7,6 +7,6 @@ import java.net.URI
 data class ChzzkProperties(
     val clientId: String,
     val clientSecret: String,
-    val loginRedirectUrlPath: String,
     val baseUrl: URI,
+    val redirectUrl: URI,
 )
