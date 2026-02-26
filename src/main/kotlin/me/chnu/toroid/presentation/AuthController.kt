@@ -1,8 +1,8 @@
 package me.chnu.toroid.presentation
 
-import me.chnu.toroid.application.ChzzkAuthUseCase
+import me.chnu.toroid.application.ChzzkOAuthUseCase
+import me.chnu.toroid.application.TokenRefreshUseCase
 import me.chnu.toroid.contract.http.ChzzkRoutes
-import me.chnu.toroid.domain.chzzk.auth.ChzzkAuthService
 import me.chnu.toroid.domain.user.RefreshToken
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
@@ -41,7 +41,7 @@ class ChzzkOAuth2Controller(
     ): ResponseEntity<Unit> {
         val authResponse = chzzkAuthUseCase.loadUser(code, state)
         val isSecure = redirectUrl.scheme.equals("https", ignoreCase = true)
-        val refreshTokenCookie = ResponseCookie.from("refresh_token", authResponse.refreshToken.value)
+        val refreshTokenCookie = ResponseCookie.from("rt", authResponse.refreshToken.value)
             .httpOnly(true)
             .secure(isSecure)
             .path("/")
@@ -60,10 +60,29 @@ class ChzzkOAuth2Controller(
     @PostMapping("/refresh")
     fun refreshToken(
         @CookieValue(
-            name = "refresh_token",
-            required = true
+            name = "rt",
+            required = true,
         ) refreshToken: RefreshToken
-    ): ResponseEntity<Unit> {
-        return ResponseEntity.ok().build()
+    ): ResponseEntity<RefreshToken> {
+        val authResponse = tokenRefreshUseCase.refreshToken(refreshToken)
+        val isSecure = redirectUrl.scheme.equals("https", ignoreCase = true)
+        val refreshTokenCookie = ResponseCookie.from("rt", authResponse.refreshToken.value)
+            .httpOnly(true)
+            .secure(isSecure)
+            .path("/")
+            .maxAge(authResponse.refreshTokenExpiresIn.toJavaDuration())
+            .sameSite("Lax")
+            .build()
+
+        HttpHeaders().apply {
+            add(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+        }
+
+        AuthResponse(
+            accessToken = TODO(),
+            refreshToken = TODO(),
+            accessTokenExpiresIn = TODO(),
+            refreshTokenExpiresIn = TODO(),
+        )
     }
 }
