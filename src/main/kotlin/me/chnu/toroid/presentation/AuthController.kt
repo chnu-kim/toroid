@@ -2,6 +2,7 @@ package me.chnu.toroid.presentation
 
 import me.chnu.toroid.application.ChzzkOAuthUseCase
 import me.chnu.toroid.application.TokenRefreshUseCase
+import me.chnu.toroid.application.TokenResponse
 import me.chnu.toroid.contract.http.ChzzkRoutes
 import me.chnu.toroid.domain.user.RefreshToken
 import org.springframework.beans.factory.annotation.Value
@@ -39,15 +40,8 @@ class AuthController(
         @RequestParam("code") code: String,
         @RequestParam("state") state: String,
     ): ResponseEntity<Unit> {
-        val authResponse = chzzkOAuthUseCase.loadUser(code, state)
-        val isSecure = redirectUrl.scheme.equals("https", ignoreCase = true)
-        val refreshTokenCookie = ResponseCookie.from("rt", authResponse.refreshToken.value)
-            .httpOnly(true)
-            .secure(isSecure)
-            .path("/")
-            .maxAge(authResponse.refreshTokenExpiresIn.toJavaDuration())
-            .sameSite("Lax")
-            .build()
+        val tokenResponse = chzzkOAuthUseCase.loadUser(code, state)
+        val refreshTokenCookie = createRefreshTokenCookie(tokenResponse)
 
         val headers = HttpHeaders().apply {
             location = redirectUrl
@@ -63,26 +57,31 @@ class AuthController(
             name = "rt",
             required = true,
         ) refreshToken: RefreshToken
-    ): ResponseEntity<RefreshToken> {
-        val authResponse = tokenRefreshUseCase.refreshToken(refreshToken)
-        val isSecure = redirectUrl.scheme.equals("https", ignoreCase = true)
-        val refreshTokenCookie = ResponseCookie.from("rt", authResponse.refreshToken.value)
-            .httpOnly(true)
-            .secure(isSecure)
-            .path("/")
-            .maxAge(authResponse.refreshTokenExpiresIn.toJavaDuration())
-            .sameSite("Lax")
-            .build()
+    ): ResponseEntity<AuthResponse> {
+        val tokenResponse = tokenRefreshUseCase.refreshToken(refreshToken)
+        val refreshTokenCookie = createRefreshTokenCookie(tokenResponse)
 
-        HttpHeaders().apply {
+        val headers = HttpHeaders().apply {
             add(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
         }
 
-        AuthResponse(
-            accessToken = TODO(),
-            refreshToken = TODO(),
-            accessTokenExpiresIn = TODO(),
-            refreshTokenExpiresIn = TODO(),
+        val authResponse = AuthResponse(
+            accessToken = tokenResponse.accessToken,
+            accessTokenExpiresIn = tokenResponse.accessTokenExpiresIn,
         )
+
+        return ResponseEntity(authResponse, headers, HttpStatus.OK)
+    }
+
+    private fun createRefreshTokenCookie(tokenResponse: TokenResponse): ResponseCookie {
+        val isSecure = redirectUrl.scheme.equals("https", ignoreCase = true)
+        val refreshTokenCookie = ResponseCookie.from("rt", tokenResponse.refreshToken.value)
+            .httpOnly(true)
+            .secure(isSecure)
+            .path("/")
+            .maxAge(tokenResponse.refreshTokenExpiresIn.toJavaDuration())
+            .sameSite("Lax")
+            .build()
+        return refreshTokenCookie
     }
 }
