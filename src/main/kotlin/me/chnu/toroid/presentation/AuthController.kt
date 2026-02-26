@@ -18,11 +18,11 @@ import java.net.URI
 import kotlin.time.toJavaDuration
 
 @RestController
-class ChzzkOAuth2Controller(
-    private val authService: ChzzkAuthService,
-    private val chzzkAuthUseCase: ChzzkAuthUseCase,
+class AuthController(
     @Value($$"${chzzk.redirect-url}")
     private val redirectUrl: URI,
+    private val chzzkOAuthUseCase: ChzzkOAuthUseCase,
+    private val tokenRefreshUseCase: TokenRefreshUseCase,
 ) {
 
     @GetMapping("/chzzk/authentication")
@@ -39,7 +39,7 @@ class ChzzkOAuth2Controller(
         @RequestParam("code") code: String,
         @RequestParam("state") state: String,
     ): ResponseEntity<Unit> {
-        val authResponse = chzzkAuthUseCase.loadUser(code, state)
+        val authResponse = chzzkOAuthUseCase.loadUser(code, state)
         val isSecure = redirectUrl.scheme.equals("https", ignoreCase = true)
         val refreshTokenCookie = ResponseCookie.from("rt", authResponse.refreshToken.value)
             .httpOnly(true)

@@ -8,7 +8,7 @@ import me.chnu.toroid.domain.user.UserService
 import org.springframework.stereotype.Service
 
 @Service
-class ChzzkAuthUseCase(
+class ChzzkOAuthUseCase(
     private val chzzkAuthService: ChzzkAuthService,
     private val userService: UserService,
     private val refreshTokenStorage: RefreshTokenStorage,
