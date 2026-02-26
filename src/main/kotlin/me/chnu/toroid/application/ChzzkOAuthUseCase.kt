@@ -35,6 +35,8 @@ class ChzzkOAuthUseCase(
             refreshTokenResponse.expiresIn,
         )
     }
+
+    fun getAuthUri() = chzzkAuthService.getAuthUri()
 }
 
 
