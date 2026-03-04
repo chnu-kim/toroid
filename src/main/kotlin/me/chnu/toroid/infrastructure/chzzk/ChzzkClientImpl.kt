@@ -1,13 +1,19 @@
 package me.chnu.toroid.infrastructure.chzzk
 
 import me.chnu.toroid.config.chzzk.ChzzkProperties
-import me.chnu.toroid.domain.chzzk.*
+import me.chnu.toroid.domain.chzzk.ChzzkApiException
+import me.chnu.toroid.domain.chzzk.ChzzkClient
+import me.chnu.toroid.domain.chzzk.Session
+import me.chnu.toroid.domain.chzzk.TokenRequest
+import me.chnu.toroid.domain.chzzk.TokenResponse
+import me.chnu.toroid.domain.chzzk.UserResponse
 import org.apache.hc.client5.http.config.ConnectionConfig
 import org.apache.hc.client5.http.config.RequestConfig
 import org.apache.hc.client5.http.impl.classic.HttpClients
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager
 import org.apache.hc.core5.util.TimeValue
 import org.apache.hc.core5.util.Timeout
+import org.springframework.data.domain.Pageable
 import org.springframework.http.MediaType
 import org.springframework.http.client.ClientHttpRequestFactory
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
@@ -63,6 +69,76 @@ class ChzzkClientImpl(
                 val url = checkNotNull(response["url"]) { "Session URL is missing from response" }
                 URI.create(url)
             }
+    }
+
+    override fun getSessions(
+        accessToken: String,
+        pageable: Pageable,
+    ): List<Session> {
+        return client.get()
+            .uri("/open/v1/sessions") {
+                it.queryParam("page", pageable.pageNumber)
+                it.queryParam("size", pageable.pageSize)
+                it.build()
+            }
+            .headers { headers -> headers.setBearerAuth(accessToken) }
+            .retrieve()
+            .body<ChzzkResponse<List<Session>>>()
+            .validateChzzkResponse()
+    }
+
+    override fun subscribeChat(accessToken: String, sessionKey: String) {
+        client.post()
+            .uri("/open/v1/sessions/events/subscribe/chat") {
+                it.queryParam("sessionKey", sessionKey)
+                it.build()
+            }
+            .retrieve()
+    }
+
+    override fun unsubscribeChat(accessToken: String, sessionKey: String) {
+        client.post()
+            .uri("/open/v1/sessions/events/unsubscribe/chat") {
+                it.queryParam("sessionKey", sessionKey)
+                it.build()
+            }
+            .retrieve()
+    }
+
+    override fun subscribeDonation(accessToken: String, sessionKey: String) {
+        client.post()
+            .uri("/open/v1/sessions/events/subscribe/donation") {
+                it.queryParam("sessionKey", sessionKey)
+                it.build()
+            }
+            .retrieve()
+    }
+
+    override fun unsubscribeDonation(accessToken: String, sessionKey: String) {
+        client.post()
+            .uri("/open/v1/sessions/events/unsubscribe/donation") {
+                it.queryParam("sessionKey", sessionKey)
+                it.build()
+            }
+            .retrieve()
+    }
+
+    override fun subscribeSubscription(accessToken: String, sessionKey: String) {
+        client.post()
+            .uri("/open/v1/sessions/events/subscribe/subscription") {
+                it.queryParam("sessionKey", sessionKey)
+                it.build()
+            }
+            .retrieve()
+    }
+
+    override fun unsubscribeSubscription(accessToken: String, sessionKey: String) {
+        client.post()
+            .uri("/open/v1/sessions/events/unsubscribe/subscription") {
+                it.queryParam("sessionKey", sessionKey)
+                it.build()
+            }
+            .retrieve()
     }
 
     private fun <T> ChzzkResponse<T>?.validateChzzkResponse(): T {
