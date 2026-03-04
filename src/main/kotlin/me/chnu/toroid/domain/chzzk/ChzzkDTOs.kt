@@ -1,13 +1,15 @@
 package me.chnu.toroid.domain.chzzk
 
+import java.time.OffsetDateTime
+
 @JvmInline
 value class ChannelId(val value: String)
 
-data class ChzzkResponse<T>(
-    val code: Int,
-    val message: String?,
-    val content: T?,
-)
+enum class ChzzkSessionEvent {
+    CHAT,
+    DONATION,
+    SUBSCRIPTION,
+}
 
 data class TokenRequest(
     val grantType: String = "authorization_code",
@@ -28,4 +30,12 @@ data class TokenResponse(
 data class UserResponse(
     val channelId: ChannelId,
     val channelName: String,
+)
+
+data class Session(
+    val sessionKey: String,
+    val connectedDate: OffsetDateTime,
+    val disconnectedDate: OffsetDateTime,
+    val subscribedEvents: List<ChzzkSessionEvent>,
+    val channelId: ChannelId,
 )
