@@ -2,6 +2,7 @@ package me.chnu.toroid.infrastructure.chzzk.auth
 
 import me.chnu.toroid.domain.chzzk.auth.StateStorage
 import org.springframework.stereotype.Component
+import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
 
@@ -14,10 +15,11 @@ class MemoryStateStorage : StateStorage {
     }
 
     override fun consumeState(state: String): Boolean {
-        if (stateRepository.containsKey(state)) {
-            stateRepository.remove(state)
-            return true
-        }
-        return false
+        val storedAt = stateRepository.remove(state) ?: return false
+        return Duration.between(storedAt, Instant.now()) <= STATE_TTL
+    }
+
+    companion object {
+        private val STATE_TTL = Duration.ofMinutes(10)
     }
 }
