@@ -42,6 +42,7 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:6.0.2")
     testImplementation("io.kotest:kotest-runner-junit5:6.0.2")
     testImplementation("com.lemonappdev:konsist:0.17.3")
+    testImplementation("io.mockk:mockk:1.14.2")
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("org.springframework.boot:spring-boot-docker-compose")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
