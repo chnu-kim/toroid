@@ -7,7 +7,7 @@ allowed-tools: Read, Edit, Write, Bash(./gradlew test), Bash(./gradlew build), B
 
 # Chzzk Skill
 
-Follow all rules in `CLAUDE.md` and `rules/` — especially `10-security.md` and `20-chzzk-api.md`.
+Follow all rules in `CLAUDE.md` and `rules/` — especially `10-security.md`, `20-chzzk-api.md` and `30-chzzk-docs.md`.
 
 ## Templates
 
