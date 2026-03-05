@@ -13,15 +13,15 @@ interface ChzzkClient {
 
     fun getSessions(accessToken: String, pageable: Pageable): List<Session>
 
-    fun subscribeChat(accessToken: String, sessionKey: String)
+    fun subscribeChat(sessionKey: String)
 
-    fun unsubscribeChat(accessToken: String, sessionKey: String)
+    fun unsubscribeChat(sessionKey: String)
 
-    fun subscribeDonation(accessToken: String, sessionKey: String)
+    fun subscribeDonation(sessionKey: String)
 
-    fun unsubscribeDonation(accessToken: String, sessionKey: String)
+    fun unsubscribeDonation(sessionKey: String)
 
-    fun subscribeSubscription(accessToken: String, sessionKey: String)
+    fun subscribeSubscription(sessionKey: String)
 
-    fun unsubscribeSubscription(accessToken: String, sessionKey: String)
+    fun unsubscribeSubscription(sessionKey: String)
 }

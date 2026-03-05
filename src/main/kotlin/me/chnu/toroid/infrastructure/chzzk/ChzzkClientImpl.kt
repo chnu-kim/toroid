@@ -87,58 +87,64 @@ class ChzzkClientImpl(
             .validateChzzkResponse()
     }
 
-    override fun subscribeChat(accessToken: String, sessionKey: String) {
+    override fun subscribeChat(sessionKey: String) {
         client.post()
             .uri("/open/v1/sessions/events/subscribe/chat") {
                 it.queryParam("sessionKey", sessionKey)
                 it.build()
             }
             .retrieve()
+            .toBodilessEntity()
     }
 
-    override fun unsubscribeChat(accessToken: String, sessionKey: String) {
+    override fun unsubscribeChat(sessionKey: String) {
         client.post()
             .uri("/open/v1/sessions/events/unsubscribe/chat") {
                 it.queryParam("sessionKey", sessionKey)
                 it.build()
             }
             .retrieve()
+            .toBodilessEntity()
     }
 
-    override fun subscribeDonation(accessToken: String, sessionKey: String) {
+    override fun subscribeDonation(sessionKey: String) {
         client.post()
             .uri("/open/v1/sessions/events/subscribe/donation") {
                 it.queryParam("sessionKey", sessionKey)
                 it.build()
             }
             .retrieve()
+            .toBodilessEntity()
     }
 
-    override fun unsubscribeDonation(accessToken: String, sessionKey: String) {
+    override fun unsubscribeDonation(sessionKey: String) {
         client.post()
             .uri("/open/v1/sessions/events/unsubscribe/donation") {
                 it.queryParam("sessionKey", sessionKey)
                 it.build()
             }
             .retrieve()
+            .toBodilessEntity()
     }
 
-    override fun subscribeSubscription(accessToken: String, sessionKey: String) {
+    override fun subscribeSubscription(sessionKey: String) {
         client.post()
             .uri("/open/v1/sessions/events/subscribe/subscription") {
                 it.queryParam("sessionKey", sessionKey)
                 it.build()
             }
             .retrieve()
+            .toBodilessEntity()
     }
 
-    override fun unsubscribeSubscription(accessToken: String, sessionKey: String) {
+    override fun unsubscribeSubscription(sessionKey: String) {
         client.post()
             .uri("/open/v1/sessions/events/unsubscribe/subscription") {
                 it.queryParam("sessionKey", sessionKey)
                 it.build()
             }
             .retrieve()
+            .toBodilessEntity()
     }
 
     private fun <T> ChzzkResponse<T>?.validateChzzkResponse(): T {
