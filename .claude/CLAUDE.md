@@ -22,6 +22,11 @@
 - Test: `./gradlew test`
 - Lint: `./gradlew detekt`
 
+## Rules 준수 (non-negotiable)
+
+- `.claude/rules/`에 path-scoped rule이 로드되면, 해당 rule이 `@docs/` 구문으로 참조하는 문서를 **작업 전에 반드시 Read 도구로 읽어야** 한다.
+- 문서를 읽지 않고 추측으로 KDoc, 주석, 구현 코드를 작성하는 것을 금지한다.
+
 ## Security rules (non-negotiable)
 
 - Do not read or print .env, secrets/**, *.key, *.pem
@@ -51,12 +56,3 @@
 - Domain layer must NOT depend on infrastructure or presentation
 - Application layer orchestrates domain interfaces; infrastructure provides implementations
 - Kotest is used as the test framework
-
-# Project Context
-
-
-## Claude Code
-
-
-@docs/claudecode/claude-code-qa-session.md
-@docs/claudecode/claude-directory-guide.md
