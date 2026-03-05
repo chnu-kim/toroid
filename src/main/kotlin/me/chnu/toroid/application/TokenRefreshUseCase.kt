@@ -19,6 +19,7 @@ class TokenRefreshUseCase(
         val user = userService.findByPublicId(userPublicId)
         val accessTokenResponse = tokenGenerator.generateAccessToken(user.publicId)
         val refreshTokenResponse = tokenGenerator.generateRefreshToken()
+        refreshTokenStorage.save(refreshTokenResponse.refreshToken, user.publicId)
 
         return TokenResponse(
             accessToken = accessTokenResponse.accessToken,
