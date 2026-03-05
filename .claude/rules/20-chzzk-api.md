@@ -1,3 +1,10 @@
+---
+paths:
+  - src/**/chzzk/**/*.kt
+  - src/**/config/chzzk/**/*.kt
+  - contract/http/**/*.kt
+---
+
 # Chzzk API Conventions
 
 

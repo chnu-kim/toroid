@@ -9,5 +9,5 @@ if [[ ! "$FP" =~ \.kts?$ ]]; then
   exit 0
 fi
 
-echo "Kotlin file modified. Run './gradlew detekt' to check style." >&2
+echo "Kotlin file modified. Run './gradlew detekt' to check style."
 exit 0

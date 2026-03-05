@@ -7,15 +7,7 @@ allowed-tools: Read, Edit, Write, Bash(./gradlew test), Bash(./gradlew build), B
 
 # Chzzk Skill
 
-
-## Rules
-
-- Never return refresh token to frontend.
-- Verify OAuth state.
-- Chzzk API calls via RestClient in infrastructure layer (`ChzzkClientImpl`).
-- Domain interfaces in `domain/chzzk/`, implementations in `infrastructure/chzzk/`.
-- Add integration tests for OAuth callback and token refresh.
-- Use Kotest for tests, Konsist for architecture validation.
+Follow all rules in `CLAUDE.md` and `rules/` — especially `10-security.md` and `20-chzzk-api.md`.
 
 ## Templates
 
