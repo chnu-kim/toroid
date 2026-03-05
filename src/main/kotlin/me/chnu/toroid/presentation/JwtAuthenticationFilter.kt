@@ -1,5 +1,6 @@
 package me.chnu.toroid.presentation
 
+import com.auth0.jwt.exceptions.JWTVerificationException
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -29,8 +30,17 @@ class JwtAuthenticationFilter(
             val userId = tokenValidator.extractUserId(accessToken)
             val token = AuthenticatedUserToken(userId)
             SecurityContextHolder.getContext().authentication = token
-        } catch (expected: Exception) {
-            klogger.trace(expected) { expected.message }
+        } catch (expected: JWTVerificationException) {
+            klogger.debug { "JWT verification failed: ${expected.message}" }
+            SecurityContextHolder.clearContext()
+        } catch (expected: IllegalArgumentException) {
+            klogger.debug { "Missing or malformed authorization header: ${expected.message}" }
+            SecurityContextHolder.clearContext()
+        } catch (
+            @Suppress("TooGenericExceptionCaught")
+            unexpected: Exception
+        ) {
+            klogger.warn(unexpected) { "Unexpected error during authentication" }
             SecurityContextHolder.clearContext()
         } finally {
             filterChain.doFilter(request, response)
