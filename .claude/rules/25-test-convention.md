@@ -8,6 +8,7 @@ paths:
 ## 프레임워크
 
 - Kotest `BehaviorSpec`를 표준 spec style로 사용한다.
+- Given/When/Then이 부자연스러운 경우(아키텍처 검증, 단순 속성 검증 등)에 한해 `StringSpec`, `FreeSpec`을 허용한다.
 - JUnit 스타일(`@Test`, `@Nested`, `@BeforeEach`)을 사용하지 않는다.
 
 ## 테스트 이름
@@ -25,6 +26,12 @@ paths:
 
 - MockK를 사용한다 (`mockk`, `every`, `verify`, `slot`).
 - Spring 컨텍스트 없이 테스트할 수 있으면 `mockk<T>()`를 우선 사용한다.
+
+## 테스트 격리
+
+- `isolationMode = IsolationMode.InstancePerTest`를 설정하여 각 테스트(Then)마다 새로운 spec 인스턴스를 생성한다.
+- 이를 통해 mock과 sut이 테스트마다 자동으로 초기화되므로 stub 누출이 발생하지 않는다.
+- `beforeTest { clearMocks(...) }`는 BehaviorSpec과 호환되지 않으므로 사용하지 않는다 (Given/When에서 설정한 stub이 Then 실행 전에 지워짐).
 
 ## Assertions
 
@@ -51,17 +58,27 @@ paths:
 ### Infrastructure (통합 테스트)
 
 - `@SpringBootTest` 또는 test slice(`@DataJpaTest`)를 사용한다.
+- Testcontainers로 Redis, PostgreSQL 등 실제 의존성을 구동한다.
+- Kotest + Spring 통합 시 `extensions(SpringExtension)` 을 spec에 등록한다.
 
 ### Presentation / Controller (슬라이스 테스트)
 
 - `@WebMvcTest(ControllerClass::class)`를 사용한다.
 - UseCase를 mock하여 주입한다.
 - `MockMvc`로 HTTP 요청/응답을 검증한다.
+- Kotest + Spring 통합 시 `extensions(SpringExtension)` 을 spec에 등록한다.
+
+## 테스트 데이터
+
+- fixture factory function을 만들지 않는다 — 테스트 내에서 직접 생성한다.
+- 중복이 심해지면 그때 도입을 검토한다.
 
 ## 구조 예시
 
 ```kotlin
 class ChzzkOAuthUseCaseTest : BehaviorSpec({
+
+    isolationMode = IsolationMode.InstancePerTest
 
     val chzzkAuthService = mockk<ChzzkAuthService>()
     val sut = ChzzkOAuthUseCase(chzzkAuthService)
