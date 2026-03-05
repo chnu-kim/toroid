@@ -6,11 +6,11 @@ import com.auth0.jwt.exceptions.JWTVerificationException
 import me.chnu.toroid.config.JwtProperties
 import me.chnu.toroid.domain.user.AccessToken
 import me.chnu.toroid.domain.user.AccessTokenResponse
-import me.chnu.toroid.domain.user.UserPublicId
 import me.chnu.toroid.domain.user.RefreshToken
 import me.chnu.toroid.domain.user.RefreshTokenResponse
 import me.chnu.toroid.domain.user.TokenGenerator
 import me.chnu.toroid.domain.user.TokenValidator
+import me.chnu.toroid.domain.user.UserPublicId
 import org.springframework.stereotype.Component
 import java.time.Clock
 import java.time.Instant
