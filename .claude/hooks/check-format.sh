@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+INPUT="$(cat)"
+FP="$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')"
+
+# Kotlin 파일이 아니면 스킵
+if [[ ! "$FP" =~ \.kts?$ ]]; then
+  exit 0
+fi
+
+echo "Kotlin file modified. Run './gradlew detekt' to check style." >&2
+exit 0
