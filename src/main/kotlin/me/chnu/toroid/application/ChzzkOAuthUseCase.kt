@@ -16,6 +16,13 @@ class ChzzkOAuthUseCase(
 ) {
 
     fun loadUser(code: String, state: String): TokenResponse {
+        if (code.isBlank() || code.length > MAX_CODE_LENGTH) {
+            throw InvalidOAuthParameterException("Invalid code parameter")
+        }
+        if (state.isBlank() || state.length > MAX_STATE_LENGTH) {
+            throw InvalidOAuthParameterException("Invalid state parameter")
+        }
+
         val chzzkUser = chzzkAuthService.authenticate(code, state)
         val user = userService.saveOrUpdate(
             SocialAccountProvider.CHZZK,
@@ -37,6 +44,9 @@ class ChzzkOAuthUseCase(
     }
 
     fun getAuthUri() = chzzkAuthService.getAuthUri()
+
+    companion object {
+        private const val MAX_CODE_LENGTH = 512
+        private const val MAX_STATE_LENGTH = 256
+    }
 }
-
-
