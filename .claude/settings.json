@@ -31,7 +31,7 @@
             {
                 "matcher": "Edit|Write",
                 "hooks": [
-                    { "type": "command", "command": ".claude/hooks/check-format.sh", "timeout": 5000 }
+                    { "type": "command", "command": ".claude/hooks/post-edit-hint.sh", "timeout": 5000 }
                 ]
             }
         ]

@@ -10,4 +10,10 @@ if [[ ! "$FP" =~ \.kts?$ ]]; then
 fi
 
 echo "Kotlin file modified. Run './gradlew detekt' to check style."
+
+# src/main/kotlin 파일이면 테스트 안내도 추가
+if [[ "$FP" == src/main/kotlin/* ]]; then
+  echo "Run './gradlew test' to verify changes."
+fi
+
 exit 0
