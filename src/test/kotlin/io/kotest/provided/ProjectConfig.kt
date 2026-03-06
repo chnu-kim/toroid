@@ -1,3 +1,5 @@
+@file:Suppress("InvalidPackageDeclaration")
+
 package io.kotest.provided
 
 import io.kotest.core.config.AbstractProjectConfig
