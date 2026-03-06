@@ -1,3 +1,12 @@
+---
+paths:
+  - src/**/*.kt
+  - src/**/resources/**/*
+  - "**/*.yml"
+  - "**/*.yaml"
+  - "**/*.properties"
+---
+
 # Security Rules
 
 
