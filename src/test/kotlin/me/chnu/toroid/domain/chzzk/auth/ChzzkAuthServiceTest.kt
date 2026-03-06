@@ -1,7 +1,6 @@
 package me.chnu.toroid.domain.chzzk.auth
 
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -21,8 +20,6 @@ class ChzzkAuthServiceTest : BehaviorSpec({
     val chzzkTokenStorage = mockk<ChzzkTokenStorage>()
     val chzzkOAuthInitiator = mockk<ChzzkOAuthInitiator>()
     val sut = ChzzkAuthService(chzzkClient, stateStorage, chzzkTokenStorage, chzzkOAuthInitiator)
-
-    isolationMode = IsolationMode.InstancePerTest
 
     Given("getAuthUri를 호출할 때") {
         val expectedUri = URI.create("https://chzzk.naver.com/oauth/authorize?state=abc")

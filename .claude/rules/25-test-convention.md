@@ -29,8 +29,9 @@ paths:
 
 ## 테스트 격리
 
-- `isolationMode = IsolationMode.InstancePerTest`를 설정하여 각 테스트(Then)마다 새로운 spec 인스턴스를 생성한다.
-- 이를 통해 mock과 sut이 테스트마다 자동으로 초기화되므로 stub 누출이 발생하지 않는다.
+- `isolationMode = IsolationMode.InstancePerRoot`를 글로벌 설정(`io.kotest.provided.ProjectConfig`)으로 적용한다.
+- 각 루트 테스트(Given)마다 새로운 spec 인스턴스를 생성하여 Given 간 격리를 보장한다.
+- 개별 spec에서 `isolationMode`를 별도로 설정하지 않는다 — 글로벌 설정을 따른다.
 - `beforeTest { clearMocks(...) }`는 BehaviorSpec과 호환되지 않으므로 사용하지 않는다 (Given/When에서 설정한 stub이 Then 실행 전에 지워짐).
 
 ## Assertions
@@ -77,8 +78,6 @@ paths:
 
 ```kotlin
 class ChzzkOAuthUseCaseTest : BehaviorSpec({
-
-    isolationMode = IsolationMode.InstancePerTest
 
     val chzzkAuthService = mockk<ChzzkAuthService>()
     val sut = ChzzkOAuthUseCase(chzzkAuthService)

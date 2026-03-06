@@ -1,7 +1,6 @@
 package me.chnu.toroid.domain.user
 
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -9,8 +8,6 @@ import io.mockk.mockk
 import io.mockk.verify
 
 class UserServiceTest : BehaviorSpec({
-
-    isolationMode = IsolationMode.InstancePerTest
 
     val userRepository = mockk<UserRepository>()
     val socialAccountRepository = mockk<SocialAccountRepository>()
