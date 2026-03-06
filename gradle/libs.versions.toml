@@ -1,0 +1,55 @@
+[versions]
+kotlin = "2.2.20"
+spring-boot = "4.0.1"
+spring-dependency-management = "1.1.7"
+detekt = "2.0.0-alpha.1"
+java-jwt = "4.5.0"
+kotlin-logging = "7.0.3"
+socket-io = "1.0.2"
+kotest = "6.0.2"
+konsist = "0.17.3"
+mockk = "1.14.2"
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
+
+[libraries]
+# Spring Boot starters (BOM-managed)
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
+spring-boot-starter-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-opentelemetry = { module = "org.springframework.boot:spring-boot-starter-opentelemetry" }
+spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+spring-boot-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis" }
+spring-boot-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose" }
+spring-boot-starter-security-test = { module = "org.springframework.boot:spring-boot-starter-security-test" }
+spring-boot-starter-webmvc-test = { module = "org.springframework.boot:spring-boot-starter-webmvc-test" }
+
+# Kotlin
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
+
+# Third-party
+jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin" }
+httpclient5 = { module = "org.apache.httpcomponents.client5:httpclient5" }
+java-jwt = { module = "com.auth0:java-jwt", version.ref = "java-jwt" }
+kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlin-logging" }
+socket-io-client = { module = "io.socket:socket.io-client", version.ref = "socket-io" }
+
+# Test
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+konsist = { module = "com.lemonappdev:konsist", version.ref = "konsist" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+
+# Runtime
+postgresql = { module = "org.postgresql:postgresql" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+
+# Detekt plugins
+detekt-rules-ktlint-wrapper = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detekt" }
